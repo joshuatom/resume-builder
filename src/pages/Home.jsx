@@ -19,26 +19,34 @@ Projects: ${data.projects}
 Education: ${data.education}
 `;
 
-    const res = await fetch("/api/groq", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    });
+    try {
+      const res = await fetch("/api/groq", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
 
-    const result = await res.json();
+      if (!res.ok) throw new Error("API request failed");
 
-    setResume(result.text);
-    setLoading(false);
+      const result = await res.json();
+      console.log("API result:", result);
+
+      // Make sure to get the text from result
+      setResume(result.text || "No content returned from AI.");
+    } catch (err) {
+      console.error("Error generating resume:", err);
+      setResume("Failed to generate resume. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div>
-      <h1>AI Resume Builder</h1>
-
+    <div style={{ maxWidth: "800px", margin: "auto", padding: "20px" }}>
+      <h1 style={{ textAlign: "center" }}>AI Resume Builder</h1>
       <Form onGenerate={handleGenerate} />
-
       {loading ? <Loader /> : <ResumePreview content={resume} />}
     </div>
   );

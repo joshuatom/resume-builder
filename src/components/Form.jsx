@@ -1,23 +1,53 @@
 import { useState } from "react";
 
 export default function Form({ onGenerate }) {
-  const [form, setForm] = useState({
-    name: "",
-    skills: "",
-    projects: "",
-    education: "",
-  });
+  const [name, setName] = useState("");
+  const [skills, setSkills] = useState("");
+  const [projects, setProjects] = useState("");
+  const [education, setEducation] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onGenerate({ name, skills, projects, education });
+  };
 
   return (
-    <div>
-      <input placeholder="Name" onChange={(e)=>setForm({...form, name:e.target.value})}/>
-      <textarea placeholder="Skills" onChange={(e)=>setForm({...form, skills:e.target.value})}/>
-      <textarea placeholder="Projects" onChange={(e)=>setForm({...form, projects:e.target.value})}/>
-      <textarea placeholder="Education" onChange={(e)=>setForm({...form, education:e.target.value})}/>
-
-      <button onClick={()=>onGenerate(form)}>
+    <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
+      <input
+        type="text"
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        style={{ width: "100%", margin: "5px 0", padding: "10px" }}
+      />
+      <input
+        type="text"
+        placeholder="Skills (comma separated)"
+        value={skills}
+        onChange={(e) => setSkills(e.target.value)}
+        required
+        style={{ width: "100%", margin: "5px 0", padding: "10px" }}
+      />
+      <input
+        type="text"
+        placeholder="Projects"
+        value={projects}
+        onChange={(e) => setProjects(e.target.value)}
+        required
+        style={{ width: "100%", margin: "5px 0", padding: "10px" }}
+      />
+      <input
+        type="text"
+        placeholder="Education"
+        value={education}
+        onChange={(e) => setEducation(e.target.value)}
+        required
+        style={{ width: "100%", margin: "5px 0", padding: "10px" }}
+      />
+      <button type="submit" style={{ padding: "10px 20px", marginTop: "10px" }}>
         Generate Resume
       </button>
-    </div>
+    </form>
   );
 }
